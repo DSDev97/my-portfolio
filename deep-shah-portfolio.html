@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deep Shah — Backend & Distributed Systems Engineer</title>
+<meta name="description" content="Deep Shah — freelance backend and distributed systems engineer specializing in fintech, telecom billing, cybersecurity data pipelines and GenAI systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0E14;
+    --bg-panel:#131826;
+    --bg-panel-alt:#0F131E;
+    --border:#232B3D;
+    --border-soft:#1A2030;
+    --text:#E6E9EF;
+    --text-muted:#8B94A7;
+    --text-dim:#5B6478;
+    --accent:#F2A93B;
+    --accent-dim:#B87F27;
+    --accent-soft:rgba(242,169,59,0.12);
+    --teal:#4FD1C5;
+    --teal-soft:rgba(79,209,197,0.12);
+    --green:#4ADE80;
+    --lavender:#B58BF2;
+    --lavender-soft:rgba(181,139,242,0.12);
+    --radius:10px;
+    --max:1120px;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',sans-serif;
+    margin:0;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 32px;}
+  section{padding:110px 0;border-bottom:1px solid var(--border-soft);}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{content:"//";color:var(--text-dim);}
+  .section-title{font-size:32px;margin-bottom:14px;}
+  .section-sub{color:var(--text-muted);font-size:16px;max-width:560px;margin-bottom:56px;}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(11,14,20,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border-soft);
+  }
+  nav.wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:72px;
+  }
+  .brand{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;display:flex;align-items:center;gap:10px;}
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
+  .navlinks{display:flex;gap:34px;align-items:center;}
+  .navlinks a{font-size:14.5px;color:var(--text-muted);transition:color .15s;}
+  .navlinks a:hover{color:var(--text);}
+  .nav-cta{
+    font-family:'IBM Plex Mono',monospace;font-size:13px;
+    border:1px solid var(--border);padding:9px 16px;border-radius:var(--radius);
+    color:var(--text);transition:border-color .15s, background .15s;
+  }
+  .nav-cta:hover{border-color:var(--accent);background:var(--accent-soft);}
+  .nav-toggle{display:none;background:none;border:1px solid var(--border);border-radius:8px;width:40px;height:40px;color:var(--text);font-size:20px;cursor:pointer;}
+  #mobile-panel{display:none;}
+
+  @media (max-width:800px){
+    .navlinks{display:none;}
+    .nav-toggle{display:flex;align-items:center;justify-content:center;}
+    #mobile-panel.open{display:flex;}
+    #mobile-panel{
+      position:fixed;top:72px;left:0;right:0;bottom:0;
+      background:var(--bg);flex-direction:column;padding:24px 32px;gap:22px;
+      z-index:99;overflow-y:auto;
+    }
+    #mobile-panel a{font-size:18px;color:var(--text);}
+    #mobile-panel .nav-cta{align-self:flex-start;}
+  }
+
+  /* ---------- HERO ---------- */
+  #hero{
+    padding-top:170px;padding-bottom:110px;border-bottom:1px solid var(--border-soft);
+    background:
+      radial-gradient(680px 380px at 85% -10%, rgba(242,169,59,0.08), transparent 60%);
+  }
+  .hero-grid{display:grid;grid-template-columns:1.1fr 0.95fr;gap:56px;align-items:center;}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;} #hero{padding-top:140px;}}
+  .hero-title{font-size:52px;line-height:1.05;margin-bottom:20px;}
+  .hero-title .hi{color:var(--accent);}
+  .hero-tag{font-size:18px;color:var(--text-muted);max-width:480px;margin-bottom:34px;}
+  .badge-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px;}
+  .badge{
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text-muted);
+    border:1px solid var(--border);padding:6px 12px;border-radius:20px;
+    display:flex;align-items:center;gap:7px;
+  }
+  .badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+  .btn-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    font-family:'IBM Plex Mono',monospace;font-size:14px;
+    padding:14px 24px;border-radius:var(--radius);cursor:pointer;
+    display:inline-flex;align-items:center;gap:8px;transition:transform .15s, background .15s, border-color .15s;
+  }
+  .btn-primary{background:var(--accent);color:#1A1204;border:1px solid var(--accent);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{border:1px solid var(--border);color:var(--text);}
+  .btn-ghost:hover{border-color:var(--text-muted);transform:translateY(-2px);}
+
+  /* dashboard panel */
+  .panel{
+    background:var(--bg-panel);border:1px solid var(--border);border-radius:14px;
+    overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,0.6);
+  }
+  .panel-head{
+    display:flex;align-items:center;gap:10px;padding:14px 18px;
+    border-bottom:1px solid var(--border);background:var(--bg-panel-alt);
+  }
+  .panel-head .traffic{display:flex;gap:6px;}
+  .panel-head .traffic span{width:9px;height:9px;border-radius:50%;background:var(--border);}
+  .panel-head .traffic span:nth-child(1){background:#E2574C;}
+  .panel-head .traffic span:nth-child(2){background:#E8B93F;}
+  .panel-head .traffic span:nth-child(3){background:#3FBF6F;}
+  .panel-head .title{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text-muted);margin-left:6px;}
+  .panel-body{padding:22px;}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  .stat-box{background:var(--bg-panel-alt);border:1px solid var(--border-soft);border-radius:8px;padding:14px 16px;}
+  .stat-label{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+  .stat-value{font-family:'Space Grotesk',sans-serif;font-size:25px;font-weight:600;}
+  .stat-value.teal{color:var(--teal);}
+  .stat-value.amber{color:var(--accent);}
+  .stat-value.green{color:var(--green);}
+  .spark-wrap{padding:14px 16px 4px;border-top:1px solid var(--border-soft);}
+  .spark-label{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;display:flex;justify-content:space-between;}
+  #sparkline path.line{fill:none;stroke:var(--teal);stroke-width:2;stroke-dasharray:400;stroke-dashoffset:400;transition:stroke-dashoffset 1.6s ease;}
+  #sparkline path.area{fill:var(--teal-soft);opacity:0;transition:opacity 1.2s ease .3s;}
+  .panel.in-view #sparkline path.line{stroke-dashoffset:0;}
+  .panel.in-view #sparkline path.area{opacity:1;}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid;grid-template-columns:1.2fr 0.8fr;gap:64px;}
+  @media (max-width:800px){.about-grid{grid-template-columns:1fr;gap:40px;}}
+  .about-grid p{color:var(--text-muted);font-size:16.5px;margin:0 0 18px;}
+  .about-grid p strong{color:var(--text);font-weight:500;}
+  .highlight-list{display:flex;flex-direction:column;gap:22px;}
+  .highlight-item{border-left:2px solid var(--border);padding-left:18px;}
+  .highlight-num{font-family:'Space Grotesk',sans-serif;font-size:28px;color:var(--accent);font-weight:600;}
+  .highlight-cap{font-size:13.5px;color:var(--text-muted);margin-top:2px;}
+
+  /* ---------- SERVICES ---------- */
+  .svc-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px;}
+  .svc-tab{
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text-muted);
+    border:1px solid var(--border);padding:9px 17px;border-radius:20px;background:none;
+    cursor:pointer;transition:border-color .15s, color .15s, background .15s;
+  }
+  .svc-tab:hover{color:var(--text);}
+  .svc-tab.active{border-color:var(--accent);color:var(--text);background:var(--accent-soft);}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border-soft);border:1px solid var(--border-soft);border-radius:12px;overflow:hidden;}
+  @media (max-width:900px){.svc-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:600px){.svc-grid{grid-template-columns:1fr;}}
+  .svc-card{background:var(--bg-panel);padding:28px 26px;transition:background .2s, opacity .2s;border-left:3px solid transparent;}
+  .svc-card:hover{background:var(--bg-panel-alt);}
+  .svc-card.hidden{display:none;}
+  .svc-card[data-cat="systems"]{border-left-color:var(--accent);}
+  .svc-card[data-cat="product"]{border-left-color:var(--teal);}
+  .svc-card[data-cat="growth"]{border-left-color:var(--lavender);}
+  .svc-cat{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+  .svc-card[data-cat="systems"] .svc-cat{color:var(--accent);}
+  .svc-card[data-cat="product"] .svc-cat{color:var(--teal);}
+  .svc-card[data-cat="growth"] .svc-cat{color:var(--lavender);}
+  .svc-cmd{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-dim);margin-bottom:12px;}
+  .svc-card h3{font-size:18px;margin-bottom:10px;}
+  .svc-card p{color:var(--text-muted);font-size:14.5px;margin:0;}
+
+  /* ---------- SKILLS ---------- */
+  .skill-groups{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;}
+  @media (max-width:700px){.skill-groups{grid-template-columns:1fr;}}
+  .skill-group-title{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;}
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .tag{
+    font-size:13.5px;color:var(--text-muted);border:1px solid var(--border);
+    padding:6px 13px;border-radius:7px;display:inline-flex;align-items:center;gap:5px;
+    transition:border-color .15s, color .15s;
+  }
+  a.tag:hover{border-color:var(--teal);color:var(--text);}
+  .tag .ext{font-size:10px;color:var(--text-dim);}
+
+  /* ---------- PROJECTS ---------- */
+  .proj-list{display:flex;flex-direction:column;gap:1px;background:var(--border-soft);border:1px solid var(--border-soft);border-radius:12px;overflow:hidden;}
+  .proj-card{background:var(--bg-panel);padding:32px 30px;display:grid;grid-template-columns:220px 1fr;gap:30px;}
+  @media (max-width:760px){.proj-card{grid-template-columns:1fr;gap:14px;}}
+  .proj-meta{display:flex;flex-direction:column;gap:8px;}
+  .proj-domain{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;}
+  .proj-kind{font-size:12.5px;color:var(--text-dim);}
+  .proj-card h3{font-size:20px;margin-bottom:10px;}
+  .proj-card ul{margin:0 0 14px;padding-left:18px;color:var(--text-muted);font-size:14.5px;}
+  .proj-card li{margin-bottom:6px;}
+  .proj-tools{display:flex;flex-wrap:wrap;gap:7px;}
+  .proj-tools a{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-dim);border:1px solid var(--border-soft);padding:4px 9px;border-radius:6px;transition:border-color .15s, color .15s;}
+  .proj-tools a:hover{border-color:var(--teal);color:var(--text);}
+  .proj-card li a, .about-grid p a{color:var(--teal);border-bottom:1px solid rgba(79,209,197,0.35);transition:border-color .15s;}
+  .proj-card li a:hover, .about-grid p a:hover{border-bottom-color:var(--teal);}
+
+  /* ---------- EXPERIENCE ---------- */
+  .timeline{position:relative;padding-left:28px;border-left:1px solid var(--border);}
+  .tl-item{position:relative;padding-bottom:44px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:"";position:absolute;left:-33.5px;top:4px;width:10px;height:10px;border-radius:50%;
+    background:var(--bg);border:2px solid var(--accent);
+  }
+  .tl-date{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text-dim);margin-bottom:6px;}
+  .tl-role{font-size:19px;margin-bottom:3px;}
+  .tl-org{font-size:14px;color:var(--teal);margin-bottom:12px;}
+  .tl-item ul{margin:0;padding-left:18px;color:var(--text-muted);font-size:14.5px;}
+  .tl-item li{margin-bottom:6px;}
+
+  /* ---------- EDUCATION ---------- */
+  .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  @media (max-width:700px){.edu-grid{grid-template-columns:1fr;}}
+  .edu-card{border:1px solid var(--border-soft);border-radius:12px;padding:26px;background:var(--bg-panel);}
+  .edu-card h3{font-size:18px;margin-bottom:6px;}
+  .edu-card .org{color:var(--teal);font-size:14.5px;margin-bottom:4px;}
+  .edu-card .date{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text-dim);margin-bottom:12px;}
+  .edu-card .grade{font-size:14px;color:var(--text-muted);}
+
+  /* ---------- CONTACT ---------- */
+  #contact{border-bottom:none;}
+  .contact-wrap{
+    background:var(--bg-panel);border:1px solid var(--border);border-radius:16px;
+    padding:64px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:50px;align-items:center;
+  }
+  @media (max-width:800px){.contact-wrap{grid-template-columns:1fr;padding:40px 28px;}}
+  .contact-wrap h2{font-size:30px;margin-bottom:14px;}
+  .contact-wrap p{color:var(--text-muted);font-size:16px;margin-bottom:0;}
+  .contact-links{display:flex;flex-direction:column;gap:16px;}
+  .contact-row{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    border:1px solid var(--border-soft);border-radius:10px;padding:15px 18px;
+    transition:border-color .15s, background .15s;
+  }
+  .contact-row:hover{border-color:var(--accent);background:var(--accent-soft);}
+  .contact-row .lbl{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;}
+  .contact-row .val{font-size:15px;}
+  .contact-row .arrow{color:var(--accent);font-family:'IBM Plex Mono',monospace;}
+
+  .tl-org a, .edu-card .org a{color:inherit;border-bottom:1px solid transparent;transition:border-color .15s;}
+  .tl-org a:hover, .edu-card .org a:hover{border-bottom-color:var(--teal);}
+  footer{padding:36px 0;text-align:center;}
+  footer p{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text-dim);margin:0 0 10px;}
+  footer a.top{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text-muted);border:1px solid var(--border);padding:7px 14px;border-radius:20px;display:inline-flex;}
+  footer a.top:hover{color:var(--text);border-color:var(--accent);}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .reveal, #sparkline path.line, #sparkline path.area{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="brand"><span class="dot"></span>Deep Shah</div>
+    <div class="navlinks">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#contact" class="nav-cta">Start a project</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">☰</button>
+  </nav>
+  <div id="mobile-panel">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#education">Education</a>
+    <a href="#contact" class="nav-cta">Start a project</a>
+  </div>
+</header>
+
+<section id="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">backend & distributed systems engineer</div>
+      <h1 class="hero-title">Deep Shah<br>builds systems that stay<br>up <span class="hi">at 2am.</span></h1>
+      <p class="hero-tag">5+ years designing backend architecture, real-time data pipelines, and distributed systems for fintech, telecom, cybersecurity and AI products.</p>
+      <div class="badge-row">
+        <span class="badge"><span class="dot"></span>Available for freelance projects</span>
+        <span class="badge">Ahmedabad, India · works with clients worldwide</span>
+      </div>
+      <div class="btn-row">
+        <a href="#contact" class="btn btn-primary">Start a project →</a>
+        <a href="#projects" class="btn btn-ghost">View work</a>
+      </div>
+    </div>
+
+    <div class="panel reveal" id="heroPanel">
+      <div class="panel-head">
+        <div class="traffic"><span></span><span></span><span></span></div>
+        <div class="title">system.status — live</div>
+      </div>
+      <div class="panel-body">
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="stat-label">System uptime</div>
+            <div class="stat-value green" data-count="99.5" data-suffix="%">0%</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Perf. improvement</div>
+            <div class="stat-value amber" data-count="40" data-suffix="%">0%</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Query time reduced</div>
+            <div class="stat-value teal" data-count="80" data-suffix="%">0%</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Tariff lookup speed</div>
+            <div class="stat-value amber" data-count="100" data-suffix="x">0x</div>
+          </div>
+        </div>
+        <div class="spark-wrap">
+          <div class="spark-label"><span>Throughput — last 12 sprints</span><span>1,000+ req/s</span></div>
+          <svg id="sparkline" viewBox="0 0 380 70" width="100%" height="70" preserveAspectRatio="none">
+            <path class="area" d="M0,55 L30,48 L60,50 L90,38 L120,42 L150,30 L180,34 L210,22 L240,26 L270,16 L300,20 L330,10 L380,12 L380,70 L0,70 Z"></path>
+            <path class="line" d="M0,55 L30,48 L60,50 L90,38 L120,42 L150,30 L180,34 L210,22 L240,26 L270,16 L300,20 L330,10 L380,12"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="reveal">
+      <div class="eyebrow">about</div>
+      <h2 class="section-title">I work on the part of the product<br>users never see — until it breaks.</h2>
+      <p>I'm a backend and distributed-systems engineer based in Ahmedabad, India, currently a <strong>Senior Software Engineer at <a href="https://www.azilen.com/" target="_blank" rel="noopener">Azilen Technologies</a></strong>. Over the last 5+ years I've built data warehouses, ETL pipelines, microservices and real-time systems for fintech, telecom, healthcare and cybersecurity companies — most recently a telecom billing engine handling sub-second charging decisions, and a GenAI assistant that lets finance teams query data in plain English.</p>
+      <p>Alongside full-time work, I take on select freelance and consulting engagements — usually where a client needs someone who can own a backend system end-to-end: design it, build it, and make sure it holds up under real traffic. Recent freelance work includes an online charging system for a telecom client and a SIEM-style data processing platform for a cybersecurity company.</p>
+      <p>I hold a Master's in Computer Applications from Silver Oak University (CGPA 9.25) and a Bachelor's from GLS University (CGPA 8.51).</p>
+    </div>
+    <div class="reveal">
+      <div class="highlight-list">
+        <div class="highlight-item">
+          <div class="highlight-num">5+ yrs</div>
+          <div class="highlight-cap">Building production backend systems, four organizations</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-num">50+</div>
+          <div class="highlight-cap">Complex production issues resolved under tight deadlines</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-num">1,000+</div>
+          <div class="highlight-cap">Concurrent users served by systems I've shipped</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-num">6</div>
+          <div class="highlight-cap">Domains worked in — fintech, telecom, cybersecurity, edtech, healthcare, GenAI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="eyebrow reveal">services</div>
+    <h2 class="section-title reveal">What I can build for you</h2>
+    <p class="section-sub reveal">Fixed-scope builds, staff-augmentation, or an architecture review — whichever fits how you work. Systems and backend work is where I go deepest; the rest covers the full product when you need one partner end-to-end.</p>
+
+    <div class="svc-tabs reveal" id="svcTabs">
+      <button class="svc-tab active" data-filter="all">All services</button>
+      <button class="svc-tab" data-filter="systems">Systems & backend</button>
+      <button class="svc-tab" data-filter="product">Product engineering</button>
+      <button class="svc-tab" data-filter="growth">Growth & content</button>
+    </div>
+
+    <div class="svc-grid reveal" id="svcGrid">
+
+      <div class="svc-card" data-cat="systems">
+        <div class="svc-cat">Systems & backend</div>
+        <div class="svc-cmd">$ backend --architecture</div>
+        <h3>Backend & microservices architecture</h3>
+        <p>Design and build backend systems in <a class="tag" href="https://www.oracle.com/java/" target="_blank" rel="noopener">Java</a>/<a class="tag" href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot</a> or <a class="tag" href="https://quarkus.io/" target="_blank" rel="noopener">Quarkus</a> that stay fast under real load — REST APIs, service boundaries, and schemas that scale with your product.</p>
+      </div>
+      <div class="svc-card" data-cat="systems">
+        <div class="svc-cat">Systems & backend</div>
+        <div class="svc-cmd">$ data --realtime</div>
+        <h3>Fintech & real-time data platforms</h3>
+        <p>Build ETL pipelines, data warehouses, and monitoring for financial products — plus Grafana/InfluxDB dashboards that show you what's happening right now.</p>
+      </div>
+      <div class="svc-card" data-cat="systems">
+        <div class="svc-cat">Systems & backend</div>
+        <div class="svc-cmd">$ billing --ocs</div>
+        <h3>Telecom billing & charging systems</h3>
+        <p>Build real-time charging and rating engines — CDR processing, pulse-based billing, gRPC/Diameter protocol handling — for telecom and usage-based billing products.</p>
+      </div>
+      <div class="svc-card" data-cat="systems">
+        <div class="svc-cat">Systems & backend</div>
+        <div class="svc-cmd">$ siem --pipeline</div>
+        <h3>Cybersecurity data pipelines</h3>
+        <p>Build large-scale log collection, indexing and search systems — Kafka-based ingestion, distributed indexing, leader election — for security monitoring products.</p>
+      </div>
+      <div class="svc-card" data-cat="systems">
+        <div class="svc-cat">Systems & backend</div>
+        <div class="svc-cmd">$ genai --nl2sql</div>
+        <h3>GenAI & data engineering</h3>
+        <p>Turn natural language into insight — GPT-powered assistants, ETL pipelines, and data modeling that let non-technical teams query complex data directly.</p>
+      </div>
+      <div class="svc-card" data-cat="systems">
+        <div class="svc-cat">Systems & backend</div>
+        <div class="svc-cmd">$ api --integrate</div>
+        <h3>API development & integrations</h3>
+        <p>Build and integrate REST APIs, OAuth flows, and third-party services — reliable, documented, and ready for other teams to build on.</p>
+      </div>
+
+      <div class="svc-card" data-cat="product">
+        <div class="svc-cat">Product engineering</div>
+        <div class="svc-cmd">$ build --fullstack</div>
+        <h3>Full-stack development</h3>
+        <p>Backend plus frontend, one owner — <a class="tag" href="https://react.dev/" target="_blank" rel="noopener">React</a>/<a class="tag" href="https://angular.io/" target="_blank" rel="noopener">Angular</a> on top of a Spring Boot API — so the two sides are designed together instead of stitched afterward.</p>
+      </div>
+      <div class="svc-card" data-cat="product">
+        <div class="svc-cat">Product engineering</div>
+        <div class="svc-cmd">$ build --mobile</div>
+        <h3>Mobile development</h3>
+        <p>Cross-platform apps in <a class="tag" href="https://reactnative.dev/" target="_blank" rel="noopener">React Native</a> or <a class="tag" href="https://flutter.dev/" target="_blank" rel="noopener">Flutter</a>, backed by the same API layer that powers your web product.</p>
+      </div>
+      <div class="svc-card" data-cat="product">
+        <div class="svc-cat">Product engineering</div>
+        <div class="svc-cmd">$ build --desktop</div>
+        <h3>Desktop development</h3>
+        <p>Desktop applications for internal tools, dashboards, or offline-first products that need to talk to the same backend as everything else.</p>
+      </div>
+
+      <div class="svc-card" data-cat="growth">
+        <div class="svc-cat">Growth & content</div>
+        <div class="svc-cmd">$ setup --crm</div>
+        <h3>CRM setup & customization</h3>
+        <p>Configure and customize CRM systems — pipelines, automations, and integrations with your existing backend — so sales and support run on real-time data.</p>
+      </div>
+      <div class="svc-card" data-cat="growth">
+        <div class="svc-cat">Growth & content</div>
+        <div class="svc-cmd">$ optimize --seo</div>
+        <h3>SEO</h3>
+        <p>Technical and on-page SEO for product and marketing sites — the kind of site-speed and structure work that comes naturally from a backend background.</p>
+      </div>
+      <div class="svc-card" data-cat="growth">
+        <div class="svc-cat">Growth & content</div>
+        <div class="svc-cmd">$ write --content</div>
+        <h3>Content writing</h3>
+        <p>Technical content — documentation, product write-ups, and engineering blog posts — written by someone who's actually built the systems being described.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow reveal">tech stack</div>
+    <h2 class="section-title reveal">Tools I reach for</h2>
+    <p class="section-sub reveal">The stack changes per project — this is what shows up most often.</p>
+    <div class="skill-groups reveal">
+      <div>
+        <div class="skill-group-title">Languages & frameworks</div>
+        <div class="tag-row">
+          <a class="tag" href="https://www.oracle.com/java/" target="_blank" rel="noopener">Java</a>
+          <a class="tag" href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot</a>
+          <a class="tag" href="https://quarkus.io/" target="_blank" rel="noopener">Quarkus</a>
+          <a class="tag" href="https://microservices.io/" target="_blank" rel="noopener">Microservices</a>
+          <a class="tag" href="https://www.python.org/" target="_blank" rel="noopener">Python</a>
+          <a class="tag" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noopener">JavaScript</a>
+          <a class="tag" href="https://react.dev/" target="_blank" rel="noopener">React</a>
+          <a class="tag" href="https://angular.io/" target="_blank" rel="noopener">Angular 12</a>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-title">Data & messaging</div>
+        <div class="tag-row">
+          <a class="tag" href="https://www.postgresql.org/" target="_blank" rel="noopener">PostgreSQL</a>
+          <a class="tag" href="https://www.mysql.com/" target="_blank" rel="noopener">MySQL</a>
+          <a class="tag" href="https://www.influxdata.com/" target="_blank" rel="noopener">InfluxDB</a>
+          <a class="tag" href="https://clickhouse.com/" target="_blank" rel="noopener">ClickHouse</a>
+          <a class="tag" href="https://kafka.apache.org/" target="_blank" rel="noopener">Kafka</a>
+          <a class="tag" href="https://redis.io/" target="_blank" rel="noopener">Redis</a>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-title">Cloud & devops</div>
+        <div class="tag-row">
+          <a class="tag" href="https://aws.amazon.com/" target="_blank" rel="noopener">AWS</a>
+          <a class="tag" href="https://azure.microsoft.com/" target="_blank" rel="noopener">Azure</a>
+          <a class="tag" href="https://cloud.google.com/" target="_blank" rel="noopener">GCP</a>
+          <a class="tag" href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a>
+          <a class="tag" href="https://airflow.apache.org/" target="_blank" rel="noopener">Airflow</a>
+          <a class="tag" href="https://www.getdbt.com/" target="_blank" rel="noopener">DBT</a>
+          <a class="tag" href="https://www.jenkins.io/" target="_blank" rel="noopener">Jenkins</a>
+          <a class="tag" href="https://grafana.com/" target="_blank" rel="noopener">Grafana</a>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-title">Observability & AI</div>
+        <div class="tag-row">
+          <a class="tag" href="https://zipkin.io/" target="_blank" rel="noopener">Zipkin / Sleuth</a>
+          <a class="tag" href="https://www.jaegertracing.io/" target="_blank" rel="noopener">Jaeger</a>
+          <a class="tag" href="https://grpc.io/" target="_blank" rel="noopener">gRPC</a>
+          <a class="tag" href="https://openai.com/" target="_blank" rel="noopener">GPT-4o mini</a>
+          <a class="tag" href="https://www.promptingguide.ai/" target="_blank" rel="noopener">Prompt engineering</a>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-title">Mobile & product</div>
+        <div class="tag-row">
+          <a class="tag" href="https://reactnative.dev/" target="_blank" rel="noopener">React Native</a>
+          <a class="tag" href="https://flutter.dev/" target="_blank" rel="noopener">Flutter</a>
+          <a class="tag" href="https://redisson.org/" target="_blank" rel="noopener">Redisson</a>
+          <a class="tag" href="https://lucene.apache.org/" target="_blank" rel="noopener">Lucene</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="eyebrow reveal">projects</div>
+    <h2 class="section-title reveal">Selected work</h2>
+    <p class="section-sub reveal">A mix of client work, freelance engagements, and systems I built to go deep on a hard problem.</p>
+
+    <div class="proj-list reveal">
+
+      <div class="proj-card">
+        <div class="proj-meta">
+          <div class="proj-domain">Telecom</div>
+          <div class="proj-kind">Freelance client · Diya Technologies</div>
+        </div>
+        <div>
+          <h3>Online Charging System</h3>
+          <ul>
+            <li>Designed a system evaluating plan overage in real time, charging on pulse-based rating with CDR billing.</li>
+            <li>Applied <a href="https://en.wikipedia.org/wiki/Strategy_pattern" target="_blank" rel="noopener">Strategy</a> and <a href="https://en.wikipedia.org/wiki/Singleton_pattern" target="_blank" rel="noopener">Singleton</a> design patterns; exponential backoff with retry for failed billing events.</li>
+          </ul>
+          <div class="proj-tools">
+            <a href="https://www.oracle.com/java/" target="_blank" rel="noopener">Java</a>
+            <a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot</a>
+            <a href="https://spring.io/projects/spring-security" target="_blank" rel="noopener">Spring Security</a>
+            <a href="https://microservices.io/" target="_blank" rel="noopener">Microservices</a>
+            <a href="https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)" target="_blank" rel="noopener">Multi-threading</a>
+            <a href="https://en.wikipedia.org/wiki/Cron" target="_blank" rel="noopener">Cron scheduling</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-meta">
+          <div class="proj-domain">Cybersecurity</div>
+          <div class="proj-kind">Freelance client · Keyanna Technologies</div>
+        </div>
+        <div>
+          <h3>DMP — SIEM-based data processing platform</h3>
+          <ul>
+            <li>Built collector, load-balancing manager, <a href="https://lucene.apache.org/" target="_blank" rel="noopener">Lucene</a>-based indexer, and a <a href="https://github.com/Netflix/eureka" target="_blank" rel="noopener">Eureka</a> client/server master node for cluster health.</li>
+            <li>Used <a href="https://kafka.apache.org/" target="_blank" rel="noopener">Kafka</a> extensively for ingestion and replay of failed messages; UDP and WebSocket-based communication.</li>
+            <li>Implemented leader election on a <a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> distributed cluster using quorum-based consensus.</li>
+          </ul>
+          <div class="proj-tools">
+            <a href="https://www.oracle.com/java/" target="_blank" rel="noopener">Java</a>
+            <a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot</a>
+            <a href="https://kafka.apache.org/" target="_blank" rel="noopener">Kafka</a>
+            <a href="https://redis.io/" target="_blank" rel="noopener">Redis</a>
+            <a href="https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)" target="_blank" rel="noopener">Multi-threading</a>
+            <a href="https://en.wikipedia.org/wiki/Factory_method_pattern" target="_blank" rel="noopener">Factory / Strategy patterns</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-meta">
+          <div class="proj-domain">Telecom</div>
+          <div class="proj-kind">Personal deep-dive build</div>
+        </div>
+        <div>
+          <h3>OCS engine management system</h3>
+          <ul>
+            <li>Distributed online charging microservice handling voice/data sessions with sub-second latency via <a href="https://grpc.io/" target="_blank" rel="noopener">gRPC</a>/Diameter.</li>
+            <li>Trie-based zone lookup for call rating — 50–100x faster tariff resolution than linear search.</li>
+            <li>Two-tier cache (ConcurrentHashMap + <a href="https://redisson.org/" target="_blank" rel="noopener">Redisson</a>) and optimistic locking for balance reservation across nodes.</li>
+            <li>40+ REST endpoints with role-based access, plus <a href="https://zipkin.io/" target="_blank" rel="noopener">Zipkin/Sleuth</a> distributed tracing.</li>
+          </ul>
+          <div class="proj-tools">
+            <a href="https://www.oracle.com/java/" target="_blank" rel="noopener">Java 8</a>
+            <a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot</a>
+            <a href="https://www.mysql.com/" target="_blank" rel="noopener">MySQL</a>
+            <a href="https://redis.io/" target="_blank" rel="noopener">Redis</a>
+            <a href="https://kafka.apache.org/" target="_blank" rel="noopener">Kafka</a>
+            <a href="https://grpc.io/" target="_blank" rel="noopener">gRPC</a>
+            <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a>
+            <a href="https://angular.io/" target="_blank" rel="noopener">Angular 12</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-meta">
+          <div class="proj-domain">GenAI · Fintech</div>
+          <div class="proj-kind">Personal deep-dive build</div>
+        </div>
+        <div>
+          <h3>NL2SQL — financial AI assistant</h3>
+          <ul>
+            <li>Built a chat assistant letting finance leaders query complex financial data in plain English.</li>
+            <li><a href="https://openai.com/" target="_blank" rel="noopener">GPT-4o mini</a> plus a full data engineering pipeline, cutting query resolution time by 80%.</li>
+          </ul>
+          <div class="proj-tools">
+            <a href="https://openai.com/" target="_blank" rel="noopener">GPT-4o mini</a>
+            <a href="https://clickhouse.com/" target="_blank" rel="noopener">ClickHouse</a>
+            <a href="https://en.wikipedia.org/wiki/Extract,_transform,_load" target="_blank" rel="noopener">ETL</a>
+            <a href="https://en.wikipedia.org/wiki/Data_modeling" target="_blank" rel="noopener">Data modeling</a>
+            <a href="https://www.promptingguide.ai/" target="_blank" rel="noopener">Prompt engineering</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-meta">
+          <div class="proj-domain">EdTech</div>
+          <div class="proj-kind">Personal deep-dive build</div>
+        </div>
+        <div>
+          <h3>Exam portal</h3>
+          <ul>
+            <li>Exam platform with a live time tracker, supporting 1,000+ users across 15+ educational institutions.</li>
+            <li>Cut downtime by 40% through a microservices-based redesign.</li>
+          </ul>
+          <div class="proj-tools">
+            <a href="https://www.oracle.com/java/" target="_blank" rel="noopener">Java</a>
+            <a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot</a>
+            <a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a>
+            <a href="https://angular.io/" target="_blank" rel="noopener">Angular 12</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="eyebrow reveal">professional experience</div>
+    <h2 class="section-title reveal">Where I've built this</h2>
+    <p class="section-sub reveal">Full-time roles — freelance and consulting work is above, under Projects.</p>
+
+    <div class="timeline reveal">
+      <div class="tl-item">
+        <div class="tl-date">Oct 2024 — Present</div>
+        <div class="tl-role">Senior Software Engineer</div>
+        <div class="tl-org"><a href="https://www.azilen.com/" target="_blank" rel="noopener">Azilen Technologies Pvt. Ltd.</a> · Ahmedabad</div>
+        <ul>
+          <li>Architect data warehouses, lakes and ETL pipelines on Spring Boot and REST APIs, improving data processing by 35%.</li>
+          <li>Lead real-time POCs using microservices and database design, delivering 20% faster solutions.</li>
+          <li>Led a client-facing fintech project on Grafana, InfluxDB, AWS and Quarkus, improving system performance by 40%.</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Jun 2022 — Sep 2024</div>
+        <div class="tl-role">Software Engineer</div>
+        <div class="tl-org">Promount Technologies LLP · Ahmedabad</div>
+        <ul>
+          <li>Resolved 50+ complex real-time issues under tight deadlines, holding 99.5% uptime and cutting resolution time by 60%.</li>
+          <li>Mentored 5+ junior engineers on REST APIs and database design, lifting team productivity by 25% and cutting defects by 30%.</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Jul 2021 — Mar 2022</div>
+        <div class="tl-role">Associate Software Engineer</div>
+        <div class="tl-org">OmniMD Technologies Pvt. Ltd. · Ahmedabad</div>
+        <ul>
+          <li>Enhanced 10+ full-stack Java applications serving 1,000+ users, improving response time by 25%.</li>
+          <li>Completed intensive backend training on microservices and database design — 0 production bugs.</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Jun 2020 — Apr 2021</div>
+        <div class="tl-role">MIS Analyst</div>
+        <div class="tl-org">Aneeta Technopack Pvt. Ltd. · Ahmedabad</div>
+        <ul>
+          <li>Built dynamic reporting with Google Apps Script, saving 30 hours a week and cutting manual errors by 90%.</li>
+          <li>Integrated Google Sheets with Spring Boot via OAuth for real-time sync across 200+ users at 99.9% accuracy.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="eyebrow reveal">education</div>
+    <h2 class="section-title reveal">Foundations</h2>
+    <div class="edu-grid reveal">
+      <div class="edu-card">
+        <h3>Master's in Computer Applications</h3>
+        <div class="org"><a href="https://www.silveroakuni.ac.in/" target="_blank" rel="noopener">Silver Oak University</a>, Ahmedabad</div>
+        <div class="date">Oct 2021 — Oct 2023</div>
+        <div class="grade">CGPA 9.25</div>
+      </div>
+      <div class="edu-card">
+        <h3>Bachelor's in Computer Applications</h3>
+        <div class="org"><a href="https://www.glsuniversity.ac.in/" target="_blank" rel="noopener">GLS University</a>, Ahmedabad</div>
+        <div class="date">May 2016 — May 2019</div>
+        <div class="grade">CGPA 8.51</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-wrap reveal">
+      <div>
+        <h2>Have a system that needs building — or fixing?</h2>
+        <p>I take on a small number of freelance and consulting engagements alongside full-time work. Tell me what you're building and I'll reply within a day or two.</p>
+      </div>
+      <div class="contact-links">
+        <a class="contact-row" href="mailto:shah.deep095@gmail.com?subject=Freelance%20project%20inquiry">
+          <span><span class="lbl">Email</span><br><span class="val">shah.deep095@gmail.com</span></span>
+          <span class="arrow">→</span>
+        </a>
+        <a class="contact-row" href="tel:+918320801935">
+          <span><span class="lbl">Phone</span><br><span class="val">+91 83208 01935</span></span>
+          <span class="arrow">→</span>
+        </a>
+        <a class="contact-row" href="https://www.linkedin.com/in/deep-shah-680836167" target="_blank" rel="noopener">
+          <span><span class="lbl">LinkedIn</span><br><span class="val">/in/deep-shah-680836167</span></span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Deep Shah — backend & distributed systems engineer, Ahmedabad, India.</p>
+  <a class="top" href="#hero">Back to top ↑</a>
+</footer>
+
+<script>
+  // services category filter
+  var svcTabs = document.querySelectorAll('.svc-tab');
+  var svcCards = document.querySelectorAll('#svcGrid .svc-card');
+  svcTabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      svcTabs.forEach(function(t){ t.classList.remove('active'); });
+      tab.classList.add('active');
+      var filter = tab.getAttribute('data-filter');
+      svcCards.forEach(function(card){
+        var match = filter === 'all' || card.getAttribute('data-cat') === filter;
+        card.classList.toggle('hidden', !match);
+      });
+    });
+  });
+
+  // mobile nav toggle
+  var toggle = document.getElementById('navToggle');
+  var panel = document.getElementById('mobile-panel');
+  toggle.addEventListener('click', function(){
+    var open = panel.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.textContent = open ? '✕' : '☰';
+  });
+  panel.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      panel.classList.remove('open');
+      toggle.setAttribute('aria-expanded','false');
+      toggle.textContent = '☰';
+    });
+  });
+
+  // reveal on scroll
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revealEls = document.querySelectorAll('.reveal');
+  if(reduceMotion){
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.15});
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+
+  // counters
+  function animateCount(el){
+    var target = parseFloat(el.getAttribute('data-count'));
+    var suffix = el.getAttribute('data-suffix') || '';
+    var isDecimal = target % 1 !== 0;
+    var start = 0;
+    var duration = 1400;
+    var startTime = null;
+    function step(ts){
+      if(!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = start + (target - start) * eased;
+      el.textContent = (isDecimal ? current.toFixed(1) : Math.round(current)) + suffix;
+      if(progress < 1) requestAnimationFrame(step);
+    }
+    if(reduceMotion){
+      el.textContent = (isDecimal ? target.toFixed(1) : target) + suffix;
+    } else {
+      requestAnimationFrame(step);
+    }
+  }
+  var heroPanel = document.getElementById('heroPanel');
+  var countEls = heroPanel.querySelectorAll('[data-count]');
+  var panelIo = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        countEls.forEach(animateCount);
+        panelIo.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.3});
+  panelIo.observe(heroPanel);
+</script>
+
+</body>
+</html>
